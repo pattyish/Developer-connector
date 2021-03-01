@@ -1,0 +1,1 @@
+Social Network for Developer, Developed with Noje js/express js for backend, react js/redux for front-end and state management and mongoDb for data store
