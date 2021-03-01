@@ -1,9 +1,12 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const app = express();
+const PORT = process.env.PORT || 8080;
 // Connecting To Database
 connectDB();
-const PORT = process.env.PORT || 8080;
+
+// Init Middleware
+app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => {
   res.send('Hello This Is My First Apis');
