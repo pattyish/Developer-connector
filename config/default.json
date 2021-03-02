@@ -1,3 +1,4 @@
 {
-    "mongoUrl": "mongodb+srv://patty:Patty@123@cluster0.bc8yd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    "mongoUrl": "mongodb+srv://patty:Patty@123@cluster0.bc8yd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "secretKey": "mysecretkey"
 }
