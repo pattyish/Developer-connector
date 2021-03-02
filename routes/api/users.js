@@ -6,8 +6,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const User = require('../../models/User');
-const { throws } = require('assert');
-const { errorMonitor } = require('events');
 
 // @route  Post/Users
 // @desc   Register User
@@ -54,7 +52,9 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
       await user.save();
       const payload = {
-        user: user.id,
+        user: {
+          id: user.id,
+        },
       };
       jwt.sign(
         payload,
@@ -67,7 +67,6 @@ router.post(
           });
         },
       );
-    //   res.status(200).send('User Registered Successfull!!!!');
     } catch (error) {
       console.log(error.message);
       res.status(500).send('Server Error');
