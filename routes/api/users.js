@@ -67,7 +67,7 @@ router.post(
           });
         },
       );
-      res.status(200).send('User Registered Successfull!!!!');
+    //   res.status(200).send('User Registered Successfull!!!!');
     } catch (error) {
       console.log(error.message);
       res.status(500).send('Server Error');
