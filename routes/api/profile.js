@@ -109,4 +109,23 @@ router.get('/', async (req, res) => {
     res.status(500).json({ msg: 'Server Error!!' });
   }
 });
+// @route  Get api/Profile/id
+// @desc   Get profile of current user
+// @access Public
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id,
+    }).populate('user', ['name', 'avatar']);
+    if (!profile)
+      return res.status(400).json({ msg: 'There is profile for this user!!' });
+    res.status(200).json(profile);
+  } catch (error) {
+    console.error(error.message);
+    if (error.kind == 'ObjectId') {
+      return res.status(400).json({ msg: 'There is profile for this user!!' });
+    }
+    res.status(500).json({ msg: 'Server Error!!' });
+  }
+});
 module.exports = router;
