@@ -1,4 +1,7 @@
 {
     "mongoUrl": "mongodb+srv://patty:Patty@123@cluster0.bc8yd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "secretKey": "mysecretkey"
+    "secretKey": "mysecretkey",
+    "githubClientId": "66ba3f1e866f48f1b9e3",
+    "githubSecret": "1109e657ab0416a84a11d44d4bb58ef12ba0040b"
+
 }
