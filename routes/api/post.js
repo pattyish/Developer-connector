@@ -122,7 +122,42 @@ router.put('/like/:id', auth, async (req, res) => {
     await post.save();
     res.status(200).json({
       msg: 'Successful Like!!',
-      likes: post.likes
+      likes: post.likes,
+    });
+  } catch (error) {
+    console.error(error.message);
+    if (error.kind == 'ObjectId') {
+      return res
+        .status(400)
+        .json({ msg: 'Post you are trying to like is not found!!' });
+    }
+    res.status(500).json({ msg: 'Server Error!!' });
+  }
+});
+// @route  Put api/posts/unlike:id
+// @desc   Unlike Post
+// @access Private
+router.put('/unlike/:id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    // check if user have been liked
+    if (
+      post.likes.filter((like) => like.user.toString() === req.user.id)
+        .length === 0
+    ) {
+      return res.status(400).json({
+        msg: 'Post has been not yet liked!!',
+      });
+    }
+    // Get index
+    const removeIndex = post.likes
+      .map((like) => like.user.toString())
+      .indexOf(req.user.id);
+    post.likes.splice(removeIndex, 1);
+    await post.save();
+    res.status(200).json({
+      msg: 'Successful unLike!!',
+      likes: post.likes,
     });
   } catch (error) {
     console.error(error.message);
