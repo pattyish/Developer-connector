@@ -169,4 +169,45 @@ router.put('/unlike/:id', auth, async (req, res) => {
     res.status(500).json({ msg: 'Server Error!!' });
   }
 });
+// @route  Post api/posts/comment/:id
+// @desc   Comment on a post
+// @access Private
+router.post(
+  '/comment/:id',
+  [auth, [check('text', 'Text is required!!').not().isEmpty()]],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const text = req.body.text;
+      const user = await User.findById(req.user.id).select('-password');
+      const post = await Post.findById(req.params.id);
+      const newComment = {
+        text: text,
+        name: user.name,
+        avatar: user.avatar,
+        user: req.user.id,
+      };
+      if (!post) {
+        return res.status(400).json({ msg: 'Post not found!!' });
+      }
+      post.comments.unshift(newComment);
+      await post.save();
+      res.status(201).json({
+        msg: 'Post created successfull!!',
+        postComments: post.comments,
+      });
+    } catch (error) {
+      console.error(error.message);
+      if (error.kind == 'ObjectId') {
+        return res
+          .status(400)
+          .json({ msg: 'Post you are trying to Comment is not found!!' });
+      }
+      res.status(500).json({ msg: 'Server Error!!' });
+    }
+  },
+);
 module.exports = router;
