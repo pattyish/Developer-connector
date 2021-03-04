@@ -5,7 +5,7 @@ const Post = require('../../models/Post');
 const User = require('../../models/User');
 const { check, validationResult } = require('express-validator');
 
-// @route  api/posts
+// @route  Post api/posts
 // @desc   Create Post
 // @access Private
 router.post(
@@ -36,5 +36,44 @@ router.post(
     }
   },
 );
-
+// @route  Get api/posts
+// @desc   Get All Posts
+// @access Private
+router.get('/', auth, async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ date: -1 });
+    res.status(200).json({
+      msg: 'All Posts',
+      posts,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: 'Server Error!!' });
+  }
+});
+// @route  Get api/posts/:id
+// @desc   Get All Posts
+// @access Private
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if(!post){
+      return res.status(400).json({
+        msg: ""
+      })
+    }
+    res.status(200).json({
+      msg: 'All Posts',
+      post,
+    });
+  } catch (error) {
+    console.error(error.message);
+    if (error.kind == 'ObjectId') {
+      return res
+        .status(400)
+        .json({ msg: 'Education You are trying to Delete not found!!' });
+    }
+    res.status(500).json({ msg: 'Server Error!!' });
+  }
+});
 module.exports = router;
